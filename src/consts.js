@@ -1,3 +1,4 @@
+// Directions of the wind
 const directions = [
   "N",
   "NNE",
@@ -18,6 +19,7 @@ const directions = [
   "N",
 ];
 
+// Options to get the current time
 const options = {
   hour12: false,
   month: "numeric",

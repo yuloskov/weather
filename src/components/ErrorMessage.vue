@@ -1,4 +1,5 @@
 <template>
+  <!-- Error message for wrong city entered -->
   <v-card
       class="mx-auto"
       max-width="700"

@@ -14,16 +14,19 @@
           <v-text-field
               hide-details
               prepend-icon="mdi-magnify"
+              append-icon="mdi-crosshairs-gps"
               single-line
               label="Enter a city"
               v-model="curCity"
               @click:prepend="updateCurWeather"
               @keyup.enter="updateCurWeather"
+              @click:append="updateCurLocWeather"
           />
         </v-toolbar>
       </v-card>
 
       <!-- Render WeatherDescription components -->
+      <!-- Either weather by city or by current coordinates -->
       <WeatherDescription
           v-if="curWeather !== 'error'"
           @savecity="saveCity"
@@ -36,7 +39,21 @@
           :city="curCity"
       />
 
-      <!-- Render saved cities modules -->
+      <!-- Divider for saved cities -->
+      <v-card
+          v-if="savedCities.length > 0"
+          flat
+          class="mx-auto"
+          max-width="700"
+          style="margin-top: 20px; margin-bottom: 20px"
+      >
+        <div class="font-weight-black">
+          Saved Cities
+        </div>
+        <v-divider></v-divider>
+      </v-card>
+
+      <!-- Render saved cities -->
       <div v-for="(weather, index) in savedWeather" :key="index">
         <WeatherDescription
             @savecity="saveCity"
@@ -66,8 +83,8 @@ export default {
   },
 
   data: () => ({
-    curCity: 'Innopolis',
-    savedCities: null,
+    curCity: '',
+    savedCities: [],
   }),
 
   computed: {
@@ -80,7 +97,9 @@ export default {
   methods: {
     // Save city to the list of favourites
     saveCity(city) {
-      if (!this.savedCities.includes(city)) this.savedCities.push(city);
+      if (this.savedCities.includes(city)) return;
+
+      this.savedCities.push(city);
       localStorage.setItem('savedCities', JSON.stringify(this.savedCities));
       this.updateSavedWeather();
     },
@@ -97,6 +116,9 @@ export default {
     updateSavedWeather() {
       this.$store.dispatch('updateSavedWeather', this.savedCities);
     },
+    updateCurLocWeather() {
+      this.$store.dispatch('updateCurLocWeather');
+    }
   },
 
   created() {
@@ -105,7 +127,9 @@ export default {
         ? JSON.parse(localStorage.getItem('savedCities'))
         : [];
 
-    this.updateCurWeather();
+    // Get initial weather by coordinates
+    this.updateCurLocWeather();
+    // Get weather from the list of saved cities
     this.updateSavedWeather();
   },
 };

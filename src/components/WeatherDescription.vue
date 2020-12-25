@@ -4,6 +4,7 @@
       max-width="700"
       style="margin-bottom: 20px"
   >
+    <!-- City name, current time and short weather description -->
     <v-list-item two-line>
       <v-list-item-content>
         <v-list-item-title class="headline">
@@ -19,7 +20,7 @@
     <v-container fluid>
       <v-row>
         <v-col>
-          <!-- Show modules image -->
+          <!-- Show weather image -->
           <v-img
               :src="imageLink"
               width="100"
@@ -34,7 +35,6 @@
           />
           <!-- Show how temperature feels like -->
           <WeatherParameter
-              style="margin-top: 5px"
               name="Feels like"
               :value="feelsLikeTemperature"
           />
@@ -48,7 +48,6 @@
           />
           <!-- Show wind direction -->
           <WeatherParameter
-              style="margin-top: 5px"
               name="Wind direction"
               :value="windDirection"
           />
@@ -62,7 +61,6 @@
           />
           <!-- Show humidity -->
           <WeatherParameter
-              style="margin-top: 5px"
               name="Humidity"
               :value="humidity"
           />
@@ -72,6 +70,8 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
+      <!-- Add city to bookmarks button -->
+      <!-- It is red if city in the bookmarks and grey otherwise -->
       <v-btn
           icon
           :color="isSaved ? 'red' : 'grey'"

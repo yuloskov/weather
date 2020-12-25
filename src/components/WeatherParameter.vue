@@ -1,6 +1,7 @@
 <template>
+  <!-- Weather parameters like temperature, wind direction, etc -->
   <v-card
-      style="text-align: center"
+      style="text-align: center; margin-top: 5px"
       flat
   >
     <div class="font-weight-medium">{{ name }}</div>
