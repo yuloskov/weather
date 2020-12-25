@@ -14,6 +14,7 @@ async function getWeatherByCoords({lat, lon}) {
 
 // Get current coordinates
 function getCoordinates() {
+  // Geolocation options
   const options = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -40,12 +41,14 @@ export const mutations = {
 };
 
 export const actions = {
+  // Action to get the weather for all the cities in the list
   updateSavedWeather({commit}, savedCities) {
     const savedWeather = {};
     return Promise.all(savedCities.map(city => getWeatherByCity(city)
       .then(response => savedWeather[city] = response.data)))
       .then(() => commit('SET_SAVED_WEATHER', savedWeather));
   },
+  // Get the weather for the city
   updateCurWeather({commit}, city) {
     return getWeatherByCity(city)
       .then(response => commit('SET_CUR_WEATHER', response.data))
@@ -54,6 +57,7 @@ export const actions = {
         commit('SET_CUR_WEATHER', 'error');
       });
   },
+  // Get the weather for current location
   updateCurLocWeather({commit}) {
     return getCoordinates()
       .then(pos => {

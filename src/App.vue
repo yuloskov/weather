@@ -7,8 +7,6 @@
       <!-- Search Bar -->
       <v-card
           class="mx-auto"
-          max-width="700"
-          style="margin-top: 20px; margin-bottom: 20px"
       >
         <v-toolbar flat>
           <v-text-field
@@ -25,42 +23,45 @@
         </v-toolbar>
       </v-card>
 
-      <!-- Render WeatherDescription components -->
-      <!-- Either weather by city or by current coordinates -->
-      <WeatherDescription
-          v-if="curWeather !== 'error'"
-          @savecity="saveCity"
-          @deletecity="deleteCity"
-          :weather="curWeather"
-          :is-saved="false"
-      />
-      <ErrorMessage
-          v-else
-          :city="curCity"
-      />
-
-      <!-- Divider for saved cities -->
-      <v-card
-          v-if="savedCities.length > 0"
-          flat
-          class="mx-auto"
-          max-width="700"
-          style="margin-top: 20px; margin-bottom: 20px"
-      >
-        <div class="font-weight-black">
-          Saved Cities
-        </div>
-        <v-divider></v-divider>
-      </v-card>
-
-      <!-- Render saved cities -->
-      <div v-for="(weather, index) in savedWeather" :key="index">
+      <!-- Render weather if loaded -->
+      <div v-if="curWeather">
+        <!-- Render weather by city or by current coordinates -->
         <WeatherDescription
+            v-if="curWeather !== 'error'"
             @savecity="saveCity"
             @deletecity="deleteCity"
-            :weather="weather"
-            :is-saved="true"
+            :weather="curWeather"
+            :is-saved="false"
         />
+        <ErrorMessage
+            v-else
+            :city="curCity"
+        />
+      </div>
+
+      <!-- Render if saved weather is loaded -->
+      <div v-if="savedWeather">
+        <!-- Divider for saved cities -->
+        <v-card
+            v-if="savedCities.length > 0"
+            flat
+            class="mx-auto"
+        >
+          <div class="font-weight-black">
+            Saved Cities
+          </div>
+          <v-divider></v-divider>
+        </v-card>
+
+        <!-- Render saved cities -->
+        <div v-for="(weather, index) in savedWeather" :key="index">
+          <WeatherDescription
+              @savecity="saveCity"
+              @deletecity="deleteCity"
+              :weather="weather"
+              :is-saved="true"
+          />
+        </div>
       </div>
     </v-main>
   </v-app>
@@ -110,6 +111,7 @@ export default {
       localStorage.setItem('savedCities', JSON.stringify(this.savedCities));
       this.updateSavedWeather();
     },
+    // Functions for store actions
     updateCurWeather() {
       this.$store.dispatch('updateCurWeather', this.curCity);
     },
@@ -134,3 +136,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-card {
+  max-width: 700px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+</style>
